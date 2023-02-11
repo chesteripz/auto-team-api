@@ -57,6 +57,9 @@ func createTeam(cards []*Card, reqs map[string]int) [][]int {
 		m := map[string]int{}
 		q_count++
 		if len(t) > last_t {
+			if len(res) > 0 {
+				break
+			}
 			fmt.Println("Team size:", len(t))
 			last_t = len(t)
 			q_count = 0
@@ -98,9 +101,6 @@ func createTeam(cards []*Card, reqs map[string]int) [][]int {
 		if len(t) > 4 {
 			break
 		}
-		if len(res) > 40 {
-			break
-		}
 		for _, card := range t {
 			for skill, count := range card.Counter {
 				m[skill] += count
@@ -120,9 +120,6 @@ func createTeam(cards []*Card, reqs map[string]int) [][]int {
 				team[i] = card.ID
 			}
 			res = append(res, team)
-			if len(res) >= 20 {
-				return res
-			}
 			continue
 		}
 		sort.Slice(cards, func(i, j int) bool {
@@ -153,7 +150,7 @@ func createTeam(cards []*Card, reqs map[string]int) [][]int {
 			if idx > 20 {
 				break
 			}
-			if len(q) > 500 {
+			if len(q) > 1250 {
 				break
 			}
 		}

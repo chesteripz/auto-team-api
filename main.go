@@ -51,6 +51,7 @@ func createTeam(cards []*Card, reqs map[string]int) [][]int {
 	q = append(q, []*Card{})
 	last_t := 0
 	q_count := 0
+	seen := map[string]bool{}
 	for len(q) > 0 {
 		t := q[0]
 		q = q[1:]
@@ -146,8 +147,19 @@ func createTeam(cards []*Card, reqs map[string]int) [][]int {
 			nt := make([]*Card, len(t)+1)
 			copy(nt, t)
 			nt[len(t)] = card
+			keys := []int{}
+			for _, cc := range nt {
+				keys = append(keys, cc.ID)
+			}
+			key, _ := json.Marshal(keys)
+			if seen[string(key)] {
+				continue
+			}
+			seen[string(key)] = true
 			q = append(q, nt)
-			if idx > 20 {
+			if last_t > 1 && idx > 20 {
+				break
+			} else if last_t == 1 && idx > 50 {
 				break
 			}
 			if len(q) > 1250 {
